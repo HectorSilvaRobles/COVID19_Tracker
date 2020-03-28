@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import ReactMapGL, {Marker, NavigationControl, Popup} from 'react-map-gl'
-import {OverlayTrigger, Popover} from 'react-bootstrap'
+import ReactMapGL, {Marker, NavigationControl, Popup, FlyToInterpolator} from 'react-map-gl'
 import axios from 'axios'
 import './App.css'
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -9,13 +8,13 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 function App() {
   // Setup map initial state
   const [viewport, setViewPort] = useState({
-    latitude: 45,
-    longitude: -75,
+    latitude: 41.87,
+    longitude: 12.56,
     width: '70vw',
     height: '100vh',
     zoom: 5
   })
-  const mapRef = useRef()
+  const mapRef = useRef()  
 
 
   // Get the data for COVID19
@@ -29,7 +28,7 @@ function App() {
 
   // Show popups
   const [selected, setSelected ] = useState(null)
-  console.log(selected)
+
   return (
     <div className="App">
      <ReactMapGL
@@ -42,7 +41,6 @@ function App() {
        minZoom={2.5}
        ref={mapRef}
        >
-       
        {data.map((val, index) => {
          return (
             <Marker 
@@ -50,9 +48,44 @@ function App() {
               longitude={val.countryInfo.long} 
               latitude={val.countryInfo.lat}
               anchor={'center'}
-              offsetLeft={-20}
-              offsetTop={-30}
-              
+              offsetLeft={
+                      val.cases > 1000000 
+                      ?
+                      -80
+                      :
+                      val.cases < 1000000 && val.cases > 100000 
+                      ?
+                      -50
+                      :
+                      val.cases < 100000 && val.cases > 10000
+                      ?
+                      -20
+                      :
+                      val.cases < 10000 && val.cases > 0
+                      ?
+                      -10
+                      :
+                      0
+              }
+              offsetTop={
+                      val.cases > 1000000 
+                      ?
+                      -100
+                      :
+                      val.cases < 1000000 && val.cases > 100000 
+                      ?
+                      -70
+                      :
+                      val.cases < 100000 && val.cases > 10000
+                      ?
+                      -50
+                      :
+                      val.cases < 10000 && val.cases > 0
+                      ?
+                      -15
+                      :
+                      0
+              }
             >
             
             <div 
@@ -89,6 +122,16 @@ function App() {
               onClick={e => {
                 e.preventDefault();
                 setSelected(val)
+                const newviewport = {
+                  latitude: val.countryInfo.lat,
+                  longitude: val.countryInfo.long,
+                  zoom: 5.5,
+                  width: '70vw',
+                  height: '100vh',
+                  transitionInterpolator: new FlyToInterpolator(),
+                  transitionDuration: "auto"
+                }
+                setViewPort(newviewport)
                 }}
               > 
               </div>
@@ -127,7 +170,10 @@ function App() {
                     <h2>{selected.cases}</h2>
                   </div>
                   </Popup>
-                ) : null}
+          ) 
+         : 
+         null
+         }
        <div style={{position: 'absolute', right: 50, top: 50}}><NavigationControl showCompass={true} showZoom={true}/></div>
      </ReactMapGL>
     </div>
