@@ -10,8 +10,8 @@ function App() {
   const [viewport, setViewPort] = useState({
     latitude: 41.87,
     longitude: 12.56,
-    width: '80vw',
-    height: '100vh',
+    width: '100vw',
+    height: '85vh',
     zoom: 3.5
   })
   const mapRef = useRef()  
@@ -38,7 +38,7 @@ function App() {
   return (
     <div className="App">
       <div className='left-side'>
-        <h1>Stay Safe and remember to wash your hands!</h1>
+        <h1>Stay Safe, Stay Home, and Wash Your Hands!</h1>
       </div>
      <ReactMapGL
        {...viewport}
@@ -202,6 +202,7 @@ function App() {
          }
        <div style={{position: 'absolute', right: 50, top: 50}}><NavigationControl showCompass={true} showZoom={true}/></div>
      </ReactMapGL>
+     <div className='footer'></div>
     </div>
   );
 }
