@@ -10,9 +10,9 @@ function App() {
   const [viewport, setViewPort] = useState({
     latitude: 41.87,
     longitude: 12.56,
-    width: '70vw',
+    width: '80vw',
     height: '100vh',
-    zoom: 5
+    zoom: 3.5
   })
   const mapRef = useRef()  
 
@@ -24,6 +24,12 @@ function App() {
     .then(res => setData(res.data))
     .catch(err => err)
   }, [0])
+  
+
+  // Add commas to number
+  function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  }
 
 
   // Show popups
@@ -31,6 +37,9 @@ function App() {
 
   return (
     <div className="App">
+      <div className='left-side'>
+        <h1>Stay Safe and remember to wash your hands!</h1>
+      </div>
      <ReactMapGL
        {...viewport}
        onViewportChange={viewport => {
@@ -125,11 +134,11 @@ function App() {
                 const newviewport = {
                   latitude: val.countryInfo.lat,
                   longitude: val.countryInfo.long,
-                  zoom: 5.5,
+                  zoom: 4.5,
                   width: '70vw',
                   height: '100vh',
                   transitionInterpolator: new FlyToInterpolator(),
-                  transitionDuration: "auto"
+                  transitionDuration: 500
                 }
                 setViewPort(newviewport)
                 }}
@@ -165,9 +174,26 @@ function App() {
                     }
                     tipSize={20}
                   >
-                  <div>
-                    <h1>{selected.country}</h1>
-                    <h2>{selected.cases}</h2>
+                  <div className='popup'>
+                    <div className='popup-header'>
+                      <h1>{selected.country}</h1>
+                      <img src={selected.countryInfo.flag} alt='country flag' />
+                    </div>
+                    <div className='popup-body'>
+                      <div className='pb-data'>
+                        <h1>Confirmed Cases</h1>
+                        <h2>{formatNumber(selected.cases)}</h2>
+                      </div>
+                      <div className='pb-data-deaths'>
+                        <h1>Confirmed Deaths</h1>
+                        <h2>{formatNumber(selected.deaths)}</h2>
+                      </div>
+                      <div className='pb-data-recovered'>
+                        <h1>Confirmed Recovered</h1>
+                        <h2>{formatNumber(selected.recovered)}</h2>
+                      </div>
+
+                    </div>
                   </div>
                   </Popup>
           ) 
