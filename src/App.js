@@ -174,22 +174,22 @@ function App() {
                     }
                     tipSize={20}
                   >
-                  <div className='popup'>
+                  <div id='popup'>
                     <div className='popup-header'>
                       <h1>{selected.country}</h1>
                       <img src={selected.countryInfo.flag} alt='country flag' />
                     </div>
                     <div className='popup-body'>
                       <div className='pb-data'>
-                        <h1>Confirmed Cases</h1>
+                        <h1>Cases</h1>
                         <h2>{formatNumber(selected.cases)}</h2>
                       </div>
                       <div className='pb-data-deaths'>
-                        <h1>Confirmed Deaths</h1>
+                        <h1>Deaths</h1>
                         <h2>{formatNumber(selected.deaths)}</h2>
                       </div>
                       <div className='pb-data-recovered'>
-                        <h1>Confirmed Recovered</h1>
+                        <h1>Recovered</h1>
                         <h2>{formatNumber(selected.recovered)}</h2>
                       </div>
 

@@ -3,6 +3,7 @@
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .left-side {
@@ -36,7 +37,7 @@
   align-items: center;
 }
 
-.popup {
+#popup {
   width: 20vw;
   height: 100%;
   display: flex;
@@ -101,3 +102,29 @@
 
 
 
+@media screen and (max-width: 600px) {
+  #popup { 
+    width: 50vw;
+  }
+
+  .pb-data > h1, .pb-data-deaths > h1, .pb-data-recovered > h1 {
+    font-size: 15px;
+  }
+  .popup-header {
+    height: 50px;
+  }
+  .popup-header > img {
+    height: auto;
+    width: 40px;
+  }
+  .popup-header > h1{
+    font-size: 20px;
+  }
+  .popup-body{
+    margin-top: 5px;
+  }
+.pb-data, .pb-data-deaths, .pb-data-recovered {
+  margin: 10px 0;
+}
+
+}
