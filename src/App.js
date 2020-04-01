@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
-import ReactMapGL, {Marker, NavigationControl, Popup, FlyToInterpolator} from 'react-map-gl'
+import MapGL, {Source, Layer, Marker, NavigationControl, Popup, FlyToInterpolator} from 'react-map-gl'
 import axios from 'axios'
 import './App.css'
+import Deck from './Deck.js'
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 
@@ -10,27 +11,27 @@ function App() {
   const [viewport, setViewPort] = useState({
     latitude: 41.87,
     longitude: 12.56,
-    width: '100vw',
-    height: '85vh',
-    zoom: 3.5
+    width: '75vw',
+    height: '100vh',
+    zoom: 3.5,
+    pitch: 50
   })
   const mapRef = useRef()  
 
-
   // Get the data for COVID19
   const [data, setData] = useState([])
+
   useEffect(() => {
-    axios.get('https://corona.lmao.ninja/countries')
+    axios.get('https://corona.lmao.ninja/v2/jhucsse')
     .then(res => setData(res.data))
     .catch(err => err)
   }, [0])
-  
+
 
   // Add commas to number
   function formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
-
 
   // Show popups
   const [selected, setSelected ] = useState(null)
@@ -40,56 +41,60 @@ function App() {
       <div className='left-side'>
         <h1>Stay Safe, Stay Home, and Wash Your Hands!</h1>
       </div>
-     <ReactMapGL
+     <MapGL
        {...viewport}
        onViewportChange={viewport => {
          setViewPort(viewport)
        }}
        mapStyle='mapbox://styles/hectorsilvarobles/ck8auv43e0hx61ik91wbtd2ep'
        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-       minZoom={2.5}
+       minZoom={3.5}
        ref={mapRef}
        >
+      
        {data.map((val, index) => {
+         const thelongitude = parseFloat(val.coordinates.longitude)
+         const thelatitude = parseFloat(val.coordinates.latitude)
+
          return (
             <Marker 
               key={index} 
-              longitude={val.countryInfo.long} 
-              latitude={val.countryInfo.lat}
+              longitude={thelongitude} 
+              latitude={thelatitude}
               anchor={'center'}
               offsetLeft={
-                      val.cases > 1000000 
+                      val.stats.confirmed > 1000000 
                       ?
                       -80
                       :
-                      val.cases < 1000000 && val.cases > 100000 
+                      val.stats.confirmed < 1000000 && val.stats.confirmed > 100000 
                       ?
                       -50
                       :
-                      val.cases < 100000 && val.cases > 10000
+                      val.stats.confirmed < 100000 && val.stats.confirmed > 10000
                       ?
                       -20
                       :
-                      val.cases < 10000 && val.cases > 0
+                      val.stats.confirmed < 10000 && val.stats.confirmed > 0
                       ?
                       -10
                       :
                       0
               }
               offsetTop={
-                      val.cases > 1000000 
+                      val.stats.confirmed > 1000000 
                       ?
                       -100
                       :
-                      val.cases < 1000000 && val.cases > 100000 
+                      val.stats.confirmed < 1000000 && val.stats.confirmed > 100000 
                       ?
                       -70
                       :
-                      val.cases < 100000 && val.cases > 10000
+                      val.stats.confirmed < 100000 && val.stats.confirmed > 10000
                       ?
                       -50
                       :
-                      val.cases < 10000 && val.cases > 0
+                      val.stats.confirmed < 10000 && val.stats.confirmed > 0
                       ?
                       -15
                       :
@@ -99,25 +104,25 @@ function App() {
             
             <div 
             className='cluster' 
-            style={ val.cases > 1000000 ? 
+            style={ val.stats.confirmed > 1000000 ? 
               {
                 width: `250px`,
                 height: `250px`,
               } 
               : 
-              val.cases > 100000 && val.cases < 1000000 ? 
+              val.stats.confirmed > 100000 && val.stats.confirmed < 1000000 ? 
               {
                 width: `120px`,
                 height: `120px`,
               }
               :
-              val.cases > 10000 && val.cases < 100000 ?
+              val.stats.confirmed > 10000 && val.stats.confirmed < 100000 ?
               {
                 width: `70px`,
                 height: `70px`,
               }
               :
-              val.cases > 0 && val.cases < 10000 ? 
+              val.stats.confirmed > 0 && val.stats.confirmed < 10000 ? 
               {
                 width: '5px',
                 height: '5px'
@@ -132,13 +137,15 @@ function App() {
                 e.preventDefault();
                 setSelected(val)
                 const newviewport = {
-                  latitude: val.countryInfo.lat,
-                  longitude: val.countryInfo.long,
+                  latitude: thelatitude,
+                  longitude: thelongitude,
                   zoom: 4.5,
-                  width: '70vw',
+                  width: '75vw',
                   height: '100vh',
                   transitionInterpolator: new FlyToInterpolator(),
-                  transitionDuration: 500
+                  transitionDuration: 500,
+                  pitch: 50
+
                 }
                 setViewPort(newviewport)
                 }}
@@ -149,24 +156,24 @@ function App() {
        })}
        {selected ? (
                   <Popup
-                    longitude={selected.countryInfo.long}
-                    latitude={selected.countryInfo.lat}
+                    longitude={parseFloat(selected.coordinates.longitude)}
+                    latitude={parseFloat(selected.coordinates.latitude)}
                     onClose={() => setSelected(null)}
                     anchor={'left'}
                     offsetLeft={
-                      selected.cases >  1000000 
+                      selected.stats.confirmed >  1000000 
                       ?
                       100
                       :
-                      selected.cases < 1000000 && selected.cases > 100000 
+                      selected.stats.confirmed < 1000000 && selected.stats.confirmed > 100000 
                       ?
                       70
                       :
-                      selected.cases < 100000 && selected.cases > 10000
+                      selected.stats.confirmed < 100000 && selected.stats.confirmed > 10000
                       ?
                       50
                       :
-                      selected.cases < 10000 && selected.cases > 0
+                      selected.stats.confirmed < 10000 && selected.stats.confirmed > 0
                       ?
                       20
                       :
@@ -177,20 +184,20 @@ function App() {
                   <div id='popup'>
                     <div className='popup-header'>
                       <h1>{selected.country}</h1>
-                      <img src={selected.countryInfo.flag} alt='country flag' />
+                      <h2>{selected.province}</h2>
                     </div>
                     <div className='popup-body'>
                       <div className='pb-data'>
                         <h1>Cases</h1>
-                        <h2>{formatNumber(selected.cases)}</h2>
+                        <h2>{formatNumber(selected.stats.confirmed)}</h2>
                       </div>
                       <div className='pb-data-deaths'>
                         <h1>Deaths</h1>
-                        <h2>{formatNumber(selected.deaths)}</h2>
+                        <h2>{formatNumber(selected.stats.deaths)}</h2>
                       </div>
                       <div className='pb-data-recovered'>
                         <h1>Recovered</h1>
-                        <h2>{formatNumber(selected.recovered)}</h2>
+                        <h2>{formatNumber(selected.stats.recovered)}</h2>
                       </div>
 
                     </div>
@@ -201,8 +208,10 @@ function App() {
          null
          }
        <div style={{position: 'absolute', right: 50, top: 50}}><NavigationControl showCompass={true} showZoom={true}/></div>
-     </ReactMapGL>
-     <div className='footer'></div>
+     </MapGL>
+     
+{/* <Deck /> */}
+     {/* <div className='footer'></div> */}
     </div>
   );
 }
