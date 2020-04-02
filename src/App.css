@@ -1,9 +1,15 @@
-.App {
+.Aap {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   /* flex-direction: column; */
   overflow: hidden;
+}
+
+.map-div {
+  height: 90vh;
+  width: 100vw;
+  background: black;
 }
 
 .left-side {
@@ -20,11 +26,7 @@
 }
 
 
-.footer {
-  height: 5vh;
-  width: 100%;
-  background: black;
-}
+
 
 .cluster {
   color: #fff;
@@ -99,10 +101,22 @@
   color: green;
 }
 
+.nav-bar {
+  height: 10vh;
+  width: 100%;
+  background: #d5d5d5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 
 
 @media screen and (max-width: 600px) {
+  .App{
+    flex-direction: column;
+  }
   #popup { 
     width: 50vw;
   }
