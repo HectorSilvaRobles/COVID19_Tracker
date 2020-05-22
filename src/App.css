@@ -1,16 +1,144 @@
-.App {
+.Aap {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  /* flex-direction: column; */
+  overflow: hidden;
 }
+
+.map-div {
+  height: 90vh;
+  width: 100vw;
+  background: black;
+}
+
+.left-side {
+  width: 25vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: red;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: calc(12px + (23 - 12) * ((100vw - 200px)/(1600 - 300)));
+}
+
+
 
 
 .cluster {
   color: #fff;
-  background: rgba(255, 69, 0, 0.5);
+  background: rgba(255, 69, 0, 0.3);
+  border: solid 2px rgb(206, 62, 0);
   border-radius: 50%;
-  padding: 10px;
+  /* padding: 2px; */
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#popup {
+  width: 20vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background: #eeeeee;
+  border: solid 1px #707070;
+  border-radius: 20px; */
+}
+.popup-header {
+  border-bottom: solid 4px #707070;
+  width: 90%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.popup-header > img {
+  width: 60px;
+  height: auto;
+}
+
+.popup-body {
+  width: 90%;
+  margin-top: 10px;
+}
+
+.pb-data, .pb-data-deaths, .pb-data-recovered {
+  /* background: red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #eeeeee;
+  border: solid 1px #707070;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 20px 0;
+}
+
+.pb-data > h1, .pb-data-deaths > h1, .pb-data-recovered > h1 {
+  margin: 0;
+  font-size: 25px;
+  color: #3c3c3c;
+}
+.pb-data > h2, .pb-data-deaths > h2, .pb-data-recovered >h2 {
+  margin: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.pb-data > h2 {
+  color: black;
+}
+.pb-data-deaths > h2 {
+  color: rgb(189, 0, 0);
+}
+.pb-data-recovered > h2 {
+  color: green;
+}
+
+.nav-bar {
+  height: 10vh;
+  width: 100%;
+  background: #d5d5d5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+  .App{
+    flex-direction: column;
+  }
+  #popup { 
+    width: 50vw;
+  }
+
+  .pb-data > h1, .pb-data-deaths > h1, .pb-data-recovered > h1 {
+    font-size: 15px;
+  }
+  .popup-header {
+    height: 50px;
+  }
+  .popup-header > img {
+    height: auto;
+    width: 40px;
+  }
+  .popup-header > h1{
+    font-size: 20px;
+  }
+  .popup-body{
+    margin-top: 5px;
+  }
+.pb-data, .pb-data-deaths, .pb-data-recovered {
+  margin: 10px 0;
+}
+
 }
