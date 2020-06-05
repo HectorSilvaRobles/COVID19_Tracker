@@ -11,23 +11,23 @@ function Map(props){
         width: '100vw',
         height: '90vh',
         zoom: 4,
-        pitch: 50
+        pitch: 40
     })
   const mapRef = useRef()
 
   // Show popups
   const [selected, setSelected ] = useState(null)
-
+  
   return (
     <div className="map">
-     <MapGL
+      <MapGL
        {...viewport}
        onViewportChange={viewport => {
          setViewPort(viewport)
        }}
        mapStyle='mapbox://styles/hectorsilvarobles/ck8auv43e0hx61ik91wbtd2ep'
        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-       minZoom={3.5}
+       minZoom={3}
        ref={mapRef}
        >
       
@@ -35,6 +35,7 @@ function Map(props){
          const thelongitude = parseFloat(val.coordinates.longitude)
          const thelatitude = parseFloat(val.coordinates.latitude)
 
+        if(thelatitude && thelongitude ){
          return (
             <Marker 
               key={index} 
@@ -119,8 +120,8 @@ function Map(props){
                   latitude: thelatitude,
                   longitude: thelongitude,
                   zoom: 5,
-                  width: '100%',
-                  height: '100%',
+                  width: '100vw',
+                  height: '100vh',
                   transitionInterpolator: new FlyToInterpolator(),
                   transitionDuration: 500,
                   pitch: 50
@@ -132,6 +133,7 @@ function Map(props){
               </div>
             </Marker>
            )
+        }
        })}
        {selected ? (
                   <Popup
